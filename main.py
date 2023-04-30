@@ -40,6 +40,16 @@ class Player(Gamesprite):
 racket1 = Player('racket.png', 10, 200, 30, 100,  15)
 racket2 = Player('racket.png', 660, 200, 30, 100, 15)
 ball = Gamesprite('tenis_ball.png', 200, 200, 50, 50, 7) 
+
+speed_x = 5
+speed_y = 5
+finish = False
+
+font.init()
+font1 = font.SysFont('Algerian', 40)
+lose1 = font1.render('PLAYER 1 LOSE!', True, (0,0,255))
+lose2 = font1.render('PLAYER 2 LOSE!', True, (0,0,255))
+
 game = True
 while game:
     window.blit(background,(0,0))
@@ -51,7 +61,25 @@ while game:
     ball.reset()
 
     racket1.update_l()
-    racket2.update_r()        
+    racket2.update_r()      
+    
+     ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if ball.rect.y < 0 or ball.rect.y > 450:
+            speed_y *= -1
+
+        if sprite.collide_rect(racket1,ball) or sprite.collide_rect(racket2,ball):
+            speed_x *= -1
+
+        if ball.rect.x < -50:
+            finish = True 
+            window.blit(lose1, (200,200))
+
+        if ball.rect.x > 700:
+            finish = True 
+            window.blit(lose2, (200,200))
+
 
             
     clock.tick(60)
